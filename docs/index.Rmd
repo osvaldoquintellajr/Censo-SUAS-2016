@@ -1,0 +1,149 @@
+---
+title: "Dados descritivos RAIS 2023 Parcial"
+author: "Osvaldo Martins Quintella Junior"
+date: "Last edited `r format(Sys.time(), '%d %B %Y')`"
+output:
+  html_document:
+    df_print: paged
+email_adress: osvaldoquintellajr@gmail.com
+github_repo: https://github.com/osvaldoquintellajr/RAIS_2023_Parcial_Dados_Descritivos
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r carregar pacotes, warning=FALSE}
+#Carregar pacotes
+library(readxl)
+library(tidyverse)
+library(labelled)
+library(ggthemes)
+```
+
+```{r importar dados, warning=FALSE}
+#Importar os dados
+CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO <- read_excel("/home/junior/Documentos/Projeto_pesquisa_IPEA/67-2024/Censo SUAS_2016/Acolhimento/CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO.xlsx")
+CensoSUAS2016_Acolhimento_RH_DIVULGAÇÃO <- read_excel("/home/junior/Documentos/Projeto_pesquisa_IPEA/67-2024/Censo SUAS_2016/Acolhimento/CensoSUAS2016_Acolhimento_RH_DIVULGAÇÃO.xlsx")
+```
+
+
+```{r Selecionar as variáveis de interesse, warning=FALSE}
+#Selecionar as variáveis de interesse
+CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO <- CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO %>%
+  select(IBGE7, IBGE, Região, UF, Municipio, Latitude, Longitude, q1, q2_1, 
+         q2_2, q4, q26, q28_1, q28_2, q28_3, q28_4, q28_5, q28_6, q28_7, q28_8, 
+         q28_SI, q28_total, q30, q32, q35)
+
+
+CensoSUAS2016_Acolhimento_RH_DIVULGAÇÃO <- CensoSUAS2016_Acolhimento_RH_DIVULGAÇÃO %>%
+  select(IBGE7, IBGE, Região, UF, Municipio, q42_7_esc, q42_5_sexo, q42_10_função)
+```
+
+```{r renomear as variáveis de interesse, warning=FALSE}
+#Renomear as variáveis de interesse
+CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO <- CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO %>%
+  rename(Gestao = q1,
+         Publico_atendido = q2_1,
+         Tipo_de_unidade = q2_2,
+         Natureza_da_unidade = q4,
+         criterio_admissao = q26,
+         Tempo_acolhimento_1 = q28_1,
+         Tempo_acolhimento_2 = q28_2,
+         Tempo_acolhimento_3 = q28_3,
+         Tempo_acolhimento_4 = q28_4,
+         Tempo_acolhimento_5 = q28_5,
+         Tempo_acolhimento_6 = q28_6,
+         Tempo_acolhimento_7 = q28_7,
+         Tempo_acolhimento_8 = q28_8,
+         Tempo_acolhimento_9 = q28_SI,
+         Tempo_acolhimento_10 = q28_total,
+         Possui_Prontuario_de_atendimento = q30,
+         Visitar_familiares = q32,
+         Tempo_acompanhamento = q35)
+
+CensoSUAS2016_Acolhimento_RH_DIVULGAÇÃO <- CensoSUAS2016_Acolhimento_RH_DIVULGAÇÃO %>%
+  rename(Escolaridade_funcionario = q42_7_esc,
+         Sexo_funcionario = q42_5_sexo,
+         Funcao_funcionario = q42_10_função)
+```
+
+```{r Rotular algumas variáveis, warning=FALSE}
+#Rotular algumas variáveis
+var_label(CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO$criterio_admissao) <- "A instituição possui critérios de sexo para admissão de seus usuários?"
+var_label(CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO$Tempo_acolhimento_1) <- "Menos de 1 mês"
+var_label(CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO$Tempo_acolhimento_2) <- "De 1 a 3 meses"
+var_label(CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO$Tempo_acolhimento_3) <- "De 4 a 6 meses"
+var_label(CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO$Tempo_acolhimento_4) <- "De 7 a 12 meses"
+var_label(CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO$Tempo_acolhimento_5) <- "De 13 a 24 meses"
+var_label(CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO$Tempo_acolhimento_6) <- "De 25 a 48 meses"
+var_label(CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO$Tempo_acolhimento_7) <- "De 49 a 72 meses"
+var_label(CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO$Tempo_acolhimento_8) <- "Mais de 72 meses"
+var_label(CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO$Tempo_acolhimento_10) <- "Total de Pessoas Acolhidas"
+```
+
+```{r verificar a esturutura do conjunto de dados, warning=FALSE}
+#Verificar a estrutura do conjunto de dados
+glimpse(CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO)
+glimpse(CensoSUAS2016_Acolhimento_RH_DIVULGAÇÃO)
+```
+
+```{r Transformar as variáveis em Factor, warning=FALSE}
+#Transformar as variáveis em Factor
+CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO <- CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO %>%
+  mutate(Região = as.factor(Região),
+         UF = as.factor(UF),
+         Gestao = as.factor(Gestao),
+         Publico_atendido = as.factor(Publico_atendido),
+         Natureza_da_unidade = as.factor(Natureza_da_unidade),
+         criterio_admissao = as.factor(criterio_admissao),
+         Possui_Prontuario_de_atendimento = as.factor(Possui_Prontuario_de_atendimento),
+         Visitar_familiares = as.factor(Visitar_familiares),
+         Tempo_acompanhamento = as.factor(Tempo_acompanhamento),
+         Tipo_de_unidade = as.factor(Tipo_de_unidade))
+
+CensoSUAS2016_Acolhimento_RH_DIVULGAÇÃO <- CensoSUAS2016_Acolhimento_RH_DIVULGAÇÃO %>%
+  mutate(Escolaridade_funcionario = as.factor(Escolaridade_funcionario),
+         Sexo_funcionario = as.factor(Sexo_funcionario),
+         Funcao_funcionario = as.factor(Funcao_funcionario))
+```
+
+```{r Gráfico de barras unidades de acolhimento por região, warning=FALSE}
+#Gráfico de barra (Unidades de acolhimento por região)
+CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO %>%
+  ggplot(aes(x = Região)) + geom_bar(aes(fill = Região)) +
+  geom_text(stat = "count", aes(label = after_stat(count)), size = 3, vjust = 1) +
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.6),
+        axis.title.y = element_blank(),
+        legend.title = element_blank(),
+        axis.title.x = element_blank(),
+        title = element_text(size = 10)) +
+  labs(title = "Número de instituições de acolhimento por região geográfica.")
+```
+
+```{r Gráfico de barras tipo de Gestão, warning=FALSE}
+#Gráfico de barras (Tipo de Gestão)
+CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO %>%
+  ggplot(aes(x = Gestao)) + geom_bar(aes(fill = Gestao)) +
+  geom_text(stat = "count", aes(label = after_stat(count)), size = 3, vjust = 1) +
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.6),
+        axis.title.y = element_blank(),
+        legend.title = element_blank(),
+        axis.title.x = element_blank(),
+        title = element_text(size = 10)) +
+  labs(title = "Número de instituições de acolhimento municipais e estaduais.")
+```
+
+```{r Numero de instituições de acolhmento por Público atendido, warning=FALSE}
+#Número de instituições de acolhimento por Público atendido
+CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO %>%
+  group_by(Publico_atendido) %>% count(sort = TRUE) 
+```
+
+```{r tabela relacionando o público atendido e a existência de prontuário de atendimento, warning=FALSE}
+#Tabela relacionando o público atendido e a existência de prontuário de atendimento
+table(CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO$Publico_atendido, CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO$Possui_Prontuario_de_atendimento)
+```
+
