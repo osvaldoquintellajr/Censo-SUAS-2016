@@ -1,5 +1,5 @@
 ---
-title: "Dados descritivos RAIS 2023 Parcial"
+title: "Análise descritiva Censo SUAS_2016."
 author: "Osvaldo Martins Quintella Junior"
 date: "Last edited `r format(Sys.time(), '%d %B %Y')`"
 output:
@@ -13,7 +13,7 @@ github_repo: https://github.com/osvaldoquintellajr/RAIS_2023_Parcial_Dados_Descr
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r carregar pacotes, warning=FALSE}
+```{r carregar pacotes, warning=FALSE, message=FALSE}
 #Carregar pacotes
 library(readxl)
 library(tidyverse)
@@ -23,8 +23,8 @@ library(ggthemes)
 
 ```{r importar dados, warning=FALSE}
 #Importar os dados
-CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO <- read_excel("/home/junior/Documentos/Projeto_pesquisa_IPEA/67-2024/Censo SUAS_2016/Acolhimento/CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO.xlsx")
-CensoSUAS2016_Acolhimento_RH_DIVULGAÇÃO <- read_excel("/home/junior/Documentos/Projeto_pesquisa_IPEA/67-2024/Censo SUAS_2016/Acolhimento/CensoSUAS2016_Acolhimento_RH_DIVULGAÇÃO.xlsx")
+CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO <- read_excel("D:/Documentos/Projeto_pesquisa_IPEA/67-2024/Censo SUAS_2016/Acolhimento/CensoSUAS2016_Acolhimento_DG_DIVULGAÇÃO.xlsx")
+CensoSUAS2016_Acolhimento_RH_DIVULGAÇÃO <- read_excel("D:/Documentos/Projeto_pesquisa_IPEA/67-2024/Censo SUAS_2016/Acolhimento/CensoSUAS2016_Acolhimento_RH_DIVULGAÇÃO.xlsx")
 ```
 
 
